@@ -31,9 +31,9 @@ Drag-n-drop-totaliser is built with [Redux](https://github.com/reactjs/redux). I
     totaliser.subscribe(hello)
 
     function hello(){
-        console.log('Hello :)')
-        console.log("totaliser.getState(): \n"+JSON.stringify(totaliser.getState(), null, 3))
+        console.log(JSON.stringify(totaliser.getState(), null, 3))
+        
         var store = totaliser.getStore()
-        console.log("var store = totaliser.getStore()\nstore.getState()\n"+JSON.stringify(store.getState(), null, 3))
+        console.log(JSON.stringify(store.getState(), null, 3))
     }
 ~~~
