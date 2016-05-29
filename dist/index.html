@@ -1,0 +1,26 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Totaliser</title>
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/dragula.min.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div id="itemContainer"></div>
+        <div id="counterContainer"></div>
+        <div id="totalCounter"></div>
+    </div>
+
+    <script src="totaliser.js"></script>
+    <script>
+    var items = { items: [
+        {name: 'item1', value: 10},
+        {name: 'item2', value: 20},
+        {name: 'item3', value: 30}
+    ]}
+    totaliser.init('itemContainer','counterContainer','totalCounter',items)
+    </script>
+</body>
+</html>
