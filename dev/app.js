@@ -95,6 +95,9 @@ module.exports = (function totaliser() {
     function initDragula(fromContainer, toContainer, dropCallback) {
         dragula([fromContainer, toContainer], {
             revertOnSpill: true,
+            accepts: function (el, target, source, sibling) {
+                return target === fromContainer ? false : true
+            },
             moves: function(el, source) {
                 return source === toContainer ? false : true
             }
