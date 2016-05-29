@@ -51,9 +51,27 @@ module.exports = (function totaliser() {
 
     function onDrop(el){
         const item = el.querySelector('.totaliser-item')
+        item.className += ' counter'
         store.dispatch({     type: ADD_COUNTER, 
                              name: item.getAttribute('name'), 
                             value: item.getAttribute('value')})
+        const button = createRemoveButton(item)
+        button.addEventListener("click", onClicked, false)
+    }
+
+    function onClicked(event){
+        console.log('clicked!')
+        console.log('Parent of target: '+event.target.parentNode.getAttribute('name'))
+        event.target.parentNode.remove()
+    }
+
+    function createRemoveButton(el){
+        let button = document.createElement('div')
+        button.className = 'totaliser-widget'
+        button.innerHTML = 'X'
+        button.id = 'remove-button'
+        el.insertBefore(button, el.firstChild)
+        return button
     }
 
     function updateCounter() {
@@ -95,9 +113,7 @@ module.exports = (function totaliser() {
     function initDragula(fromContainer, toContainer, dropCallback) {
         dragula([fromContainer, toContainer], {
             revertOnSpill: true,
-            accepts: function (el, target, source, sibling) {
-                return target === fromContainer ? false : true
-            },
+            copy: true,
             moves: function(el, source) {
                 return source === toContainer ? false : true
             }
