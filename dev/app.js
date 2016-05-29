@@ -13,8 +13,10 @@ import {
 module.exports = (function totaliser() {
 
     // create store
-    let store = createStore(counters)
-    let counter
+    const store = createStore(counters)
+    let counter,
+        fromContainer,
+        toContainer
 
     // API methods
     
@@ -27,9 +29,9 @@ module.exports = (function totaliser() {
         updateCounter(counter)
         // populate itemContainer with items
         const itemElements = createItems(itemsList)
-        const fromContainer = document.getElementById(itemContainer)
+        fromContainer = document.getElementById(itemContainer)
         populateContainer(fromContainer, itemElements)
-        const toContainer = document.getElementById(counterContainer)
+        toContainer = document.getElementById(counterContainer)
         // initiate dragula
         initDragula(fromContainer, toContainer, onDrop)
     }
@@ -48,18 +50,20 @@ module.exports = (function totaliser() {
 
     // Private methods
 
-    function onDrop(el){
-        const item = el.querySelector('.totaliser-item')
-        item.className += ' counter'
-        const uniqueId = generateId()
-        item.setAttribute('id',uniqueId)
-        store.dispatch({     type: ADD_COUNTER, 
-                             name: item.getAttribute('name'), 
-                            value: item.getAttribute('value'),
-                               id: uniqueId
-                        })
-        const button = createRemoveButton(item)
-        button.addEventListener("click", onClicked, false)
+    function onDrop(el, target){
+        if (target === toContainer) {
+            const item = el.querySelector('.totaliser-item')
+            item.className += ' counter'
+            const uniqueId = generateId()
+            item.setAttribute('id',uniqueId)
+            store.dispatch({     type: ADD_COUNTER, 
+                                 name: item.getAttribute('name'), 
+                                value: item.getAttribute('value'),
+                                   id: uniqueId
+                            })
+            const button = createRemoveButton(item)
+            button.addEventListener("click", onClicked, false)
+        }
     }
 
     function onClicked(event){
@@ -118,7 +122,6 @@ module.exports = (function totaliser() {
 
     function initDragula(fromContainer, toContainer, dropCallback) {
         dragula([fromContainer, toContainer], {
-            revertOnSpill: true,
             copy: true,
             moves: function(el, source) {
                 return source === toContainer ? false : true
