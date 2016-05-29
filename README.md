@@ -25,7 +25,7 @@ Feed totaliser your data in a JSON object. Items are dragged from the '#itemCont
 ~~~
 
 ## API
-Drag-n-drop-totaliser's state is managed by [Redux](https://github.com/reactjs/redux). Drag-n-drop-totaliser's API exposes its `state` and `store` objects. Call functions any time the state changes by using the `totaliser.subscribe()` method.
+Drag-n-drop-totaliser's state is managed by [Redux](https://github.com/reactjs/redux). Its API exposes Redux's `state` and `store` objects. Functions can be called each time the state changes by passing them to the `totaliser.subscribe()` method.
 
 ~~~
     totaliser.subscribe(hello)
