@@ -8,8 +8,7 @@ Add up arbitrary amounts using drag and drop UI. Built with [Dragula](https://gi
 ## Why?
 Add up the total number of legs of animals in a list. Estimate the cost of a job given a list of services required. Drag items from a restaurant menu, get the total bill.
 
-# How?
-
+## How?
 Feed totaliser your data in a JSON object. Items are dragged from the '#itemContainer' to the '#counterContainer'. The total is displayed in the '#totalCounter'. 
 
 ~~~
