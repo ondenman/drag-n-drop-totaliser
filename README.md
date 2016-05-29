@@ -3,7 +3,7 @@
 <img src="./assets/screengrab.png" alt="drag-n-drop-totaliser screen grab">
 
 ## What?
-Add up abitrary amounts using drag and drop UI. Built with [Dragula](https://github.com/bevacqua/dragula) and [Redux](https://github.com/reactjs/redux)
+Add up arbitrary amounts using drag and drop UI. Built with [Dragula](https://github.com/bevacqua/dragula) and [Redux](https://github.com/reactjs/redux).
 
 ## Why?
 Add up the total number of legs of animals in a list. Estimate the cost of a job given a list of services required. Drag items from a restaurant menu, get the total bill.
