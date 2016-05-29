@@ -20,6 +20,7 @@ body {
 #itemContainer, #counterContainer {
     background-color: #fafafa;
     display: inline-block;
+    text-align: left;
     vertical-align: top;
     margin: 1em;
     padding: 0.5em;
@@ -40,7 +41,6 @@ body {
 
 .totaliser-item {
     display: inline-block;
-    float: left;
     padding: 0.5em;
     margin: 0.5em;
     border-radius: 0.5em;
