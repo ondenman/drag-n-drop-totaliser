@@ -40,12 +40,35 @@ body {
 }
 
 .totaliser-item {
+    vertical-align: middle;
     display: inline-block;
     padding: 0.5em;
     margin: 0.5em;
     border-radius: 0.5em;
     background-color: #efefef;
     cursor: pointer;
+}
+
+.counter {
+    text-align: center;
+}
+
+.totaliser-widget {
+    display: inline-block;
+    text-align: center;
+    background-color: #fafafa;
+    width: 1em;
+    border-radius: 2px;
+}
+
+#remove-button {
+    float: left;
+    margin-right: 0.5em;
+}
+
+#plus-button, #minus-button {
+    float: right;
+    margin-left: 0.5em;
 }
 
 #counterContainer .totaliser-item {
