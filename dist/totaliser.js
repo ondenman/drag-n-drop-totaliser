@@ -17,10 +17,11 @@ module.exports = function totaliser() {
 
     // create store
     var store = (0, _redux.createStore)(_reducer.counters);
-    var state = store.getState();
     var counter = void 0;
 
-    function init(itemContainer, counterContainer, totalCounter, items) {
+    // API methods
+
+    function initAPI(itemContainer, counterContainer, totalCounter, items) {
         // extract items array from JSON
         var itemsList = items.items;
         // subscribe totalCounter to state
@@ -36,11 +37,55 @@ module.exports = function totaliser() {
         initDragula(fromContainer, toContainer, onDrop);
     }
 
+    function getStoreAPI() {
+        return store;
+    }
+
+    function getStateAPI() {
+        return store.getState();
+    }
+
+    function subscribeAPI(func) {
+        store.subscribe(func);
+    }
+
+    // Private methods
+
     function onDrop(el) {
         var item = el.querySelector('.totaliser-item');
+        item.className += ' counter';
+        var uniqueId = generateId();
+        item.setAttribute('id', uniqueId);
         store.dispatch({ type: _constants.ADD_COUNTER,
             name: item.getAttribute('name'),
-            value: item.getAttribute('value') });
+            value: item.getAttribute('value'),
+            id: uniqueId
+        });
+        var button = createRemoveButton(item);
+        button.addEventListener("click", onClicked, false);
+    }
+
+    function onClicked(event) {
+        var item = event.target.parentNode;
+        var id = parseInt(item.getAttribute('id'));
+        console.log('id to remove: ' + id);
+        store.dispatch({ type: _constants.REMOVE_COUNTER, id: id });
+        item.remove();
+    }
+
+    function generateId() {
+        return store.getState().reduce(function (maxId, obj) {
+            return Math.max(maxId, obj.id);
+        }, 0) + 1;
+    }
+
+    function createRemoveButton(el) {
+        var button = document.createElement('div');
+        button.className = 'totaliser-widget';
+        button.innerHTML = 'X';
+        button.id = 'remove-button';
+        el.appendChild(button);
+        return button;
     }
 
     function updateCounter() {
@@ -50,16 +95,8 @@ module.exports = function totaliser() {
         var total = state.reduce(function (total, obj) {
             return total + obj.value * obj.tally;
         }, 0);
-        console.log(total);
+        console.log(JSON.stringify(state, null, 3));
         counter.innerHTML = total;
-    }
-
-    function getState() {
-        return store.getState();
-    }
-
-    function subscribe(func) {
-        store.subscribe(func);
     }
 
     function createItems(items) {
@@ -90,6 +127,7 @@ module.exports = function totaliser() {
     function initDragula(fromContainer, toContainer, dropCallback) {
         (0, _dragula2.default)([fromContainer, toContainer], {
             revertOnSpill: true,
+            copy: true,
             moves: function moves(el, source) {
                 return source === toContainer ? false : true;
             }
@@ -97,9 +135,10 @@ module.exports = function totaliser() {
     }
 
     return {
-        init: init,
-        getState: getState,
-        subscribe: subscribe
+        init: initAPI,
+        getState: getStateAPI,
+        getStore: getStoreAPI,
+        subscribe: subscribeAPI
     };
 }();
 
@@ -130,22 +169,23 @@ exports.counters = function () {
             return state.concat([{
                 name: action.name,
                 value: action.value,
+                id: action.id,
                 tally: 1
             }]);
         case _constants.REMOVE_COUNTER:
             return state.filter(function (counter) {
-                if (counter.name !== action.name) return counter;
+                if (counter.id !== action.id) return counter;
             });
         case _constants.INCREMENT_COUNTER:
             return state.map(function (counter) {
-                if (counter.name === action.name) {
+                if (counter.id === action.id) {
                     return Object.assign({}, counter, { tally: counter.tally + 1 });
                 }
                 return counter;
             });
         case _constants.DECREMENT_COUNTER:
             return state.map(function (counter) {
-                if (counter.name === action.name) {
+                if (counter.id === action.id) {
                     var decrementBy = counter.tally === 0 ? 0 : 1;
                     return Object.assign({}, counter, { tally: counter.tally - decrementBy });
                 }

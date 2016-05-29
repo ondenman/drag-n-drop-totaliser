@@ -13,13 +13,12 @@ import {
 module.exports = (function totaliser() {
 
     // create store
-    const store = createStore(counters)
-    let state = store.getState()
+    let store = createStore(counters)
     let counter
 
     // API methods
     
-    function init(itemContainer, counterContainer, totalCounter, items){
+    function initAPI(itemContainer, counterContainer, totalCounter, items){
         // extract items array from JSON
         const itemsList = items.items
         // subscribe totalCounter to state
@@ -35,15 +34,15 @@ module.exports = (function totaliser() {
         initDragula(fromContainer, toContainer, onDrop)
     }
 
-    function getStore() {
+    function getStoreAPI() {
         return store
     }
 
-    function getState() {
+    function getStateAPI() {
         return store.getState()
     }
 
-    function subscribe(func) {
+    function subscribeAPI(func) {
         store.subscribe(func)
     }
 
@@ -52,17 +51,26 @@ module.exports = (function totaliser() {
     function onDrop(el){
         const item = el.querySelector('.totaliser-item')
         item.className += ' counter'
+        const uniqueId = generateId()
+        item.setAttribute('id',uniqueId)
         store.dispatch({     type: ADD_COUNTER, 
                              name: item.getAttribute('name'), 
-                            value: item.getAttribute('value')})
+                            value: item.getAttribute('value'),
+                               id: uniqueId
+                        })
         const button = createRemoveButton(item)
         button.addEventListener("click", onClicked, false)
     }
 
     function onClicked(event){
-        console.log('clicked!')
-        console.log('Parent of target: '+event.target.parentNode.getAttribute('name'))
-        event.target.parentNode.remove()
+        const item = event.target.parentNode
+        const id = parseInt(item.getAttribute('id'))
+        store.dispatch({type: REMOVE_COUNTER, id: id})
+        item.remove()
+    }
+
+    function generateId() {
+       return store.getState().reduce((maxId, obj) => Math.max(maxId, obj.id),0)+1
     }
 
     function createRemoveButton(el){
@@ -70,18 +78,16 @@ module.exports = (function totaliser() {
         button.className = 'totaliser-widget'
         button.innerHTML = 'X'
         button.id = 'remove-button'
-        el.insertBefore(button, el.firstChild)
+        el.appendChild(button)
         return button
     }
 
     function updateCounter() {
-        console.log('Updating counter')
         let state = store.getState()
         let that = this
         let total = state.reduce((total, obj) => {
             return total + obj.value * obj.tally
         }, 0)
-        console.log(total)
         counter.innerHTML = total
     }
 
@@ -121,9 +127,9 @@ module.exports = (function totaliser() {
     }
 
     return {
-        init: init,
-        getState: getState,
-        getStore: getStore,
-        subscribe: subscribe
+        init: initAPI,
+        getState: getStateAPI,
+        getStore: getStoreAPI,
+        subscribe: subscribeAPI
     }
 })()

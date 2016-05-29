@@ -15,23 +15,23 @@ exports.counters = (state = initialState, action) => {
             return state.concat([{
                 name: action.name,
                 value: action.value,
+                id: action.id,
                 tally: 1
             }])
         case REMOVE_COUNTER:
-            return state.filter((counter) => {
-                if (counter.name !== action.name)
-                    return counter
+            return state.filter(counter => {
+                if (counter.id !== action.id) return counter
             })
         case INCREMENT_COUNTER:
             return state.map((counter) => {
-                if (counter.name === action.name) {
+                if (counter.id === action.id) {
                     return Object.assign({}, counter, {tally: counter.tally + 1})
                 }
                 return counter
             })
         case DECREMENT_COUNTER:
             return state.map((counter) => {
-                if (counter.name === action.name) {
+                if (counter.id === action.id) {
                     let decrementBy = counter.tally === 0 ? 0 : 1
                     return Object.assign({}, counter, {tally: counter.tally - decrementBy})
                 }

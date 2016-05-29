@@ -63,14 +63,11 @@ body {
 
 #remove-button {
     float: left;
-    margin-right: 0.5em;
-}
-
-#plus-button, #minus-button {
-    float: right;
-    margin-left: 0.5em;
+    margin-right: -2em;
+    /*margin-right: 0.5em;*/
 }
 
 #counterContainer .totaliser-item {
     display: block;
+    text-align: center;
 }
