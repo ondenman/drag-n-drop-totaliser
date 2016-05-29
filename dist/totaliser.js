@@ -17,7 +17,9 @@ module.exports = function totaliser() {
 
     // create store
     var store = (0, _redux.createStore)(_reducer.counters);
-    var counter = void 0;
+    var counter = void 0,
+        fromContainer = void 0,
+        toContainer = void 0;
 
     // API methods
 
@@ -30,9 +32,9 @@ module.exports = function totaliser() {
         updateCounter(counter);
         // populate itemContainer with items
         var itemElements = createItems(itemsList);
-        var fromContainer = document.getElementById(itemContainer);
+        fromContainer = document.getElementById(itemContainer);
         populateContainer(fromContainer, itemElements);
-        var toContainer = document.getElementById(counterContainer);
+        toContainer = document.getElementById(counterContainer);
         // initiate dragula
         initDragula(fromContainer, toContainer, onDrop);
     }
@@ -51,24 +53,25 @@ module.exports = function totaliser() {
 
     // Private methods
 
-    function onDrop(el) {
-        var item = el.querySelector('.totaliser-item');
-        item.className += ' counter';
-        var uniqueId = generateId();
-        item.setAttribute('id', uniqueId);
-        store.dispatch({ type: _constants.ADD_COUNTER,
-            name: item.getAttribute('name'),
-            value: item.getAttribute('value'),
-            id: uniqueId
-        });
-        var button = createRemoveButton(item);
-        button.addEventListener("click", onClicked, false);
+    function onDrop(el, target) {
+        if (target === toContainer) {
+            var item = el.querySelector('.totaliser-item');
+            item.className += ' counter';
+            var uniqueId = generateId();
+            item.setAttribute('id', uniqueId);
+            store.dispatch({ type: _constants.ADD_COUNTER,
+                name: item.getAttribute('name'),
+                value: item.getAttribute('value'),
+                id: uniqueId
+            });
+            var button = createRemoveButton(item);
+            button.addEventListener("click", onClicked, false);
+        }
     }
 
     function onClicked(event) {
         var item = event.target.parentNode;
         var id = parseInt(item.getAttribute('id'));
-        console.log('id to remove: ' + id);
         store.dispatch({ type: _constants.REMOVE_COUNTER, id: id });
         item.remove();
     }
@@ -89,13 +92,11 @@ module.exports = function totaliser() {
     }
 
     function updateCounter() {
-        console.log('Updating counter');
         var state = store.getState();
         var that = this;
         var total = state.reduce(function (total, obj) {
             return total + obj.value * obj.tally;
         }, 0);
-        console.log(JSON.stringify(state, null, 3));
         counter.innerHTML = total;
     }
 
@@ -126,7 +127,6 @@ module.exports = function totaliser() {
 
     function initDragula(fromContainer, toContainer, dropCallback) {
         (0, _dragula2.default)([fromContainer, toContainer], {
-            revertOnSpill: true,
             copy: true,
             moves: function moves(el, source) {
                 return source === toContainer ? false : true;
