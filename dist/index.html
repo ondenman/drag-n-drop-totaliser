@@ -16,11 +16,21 @@
     <script src="totaliser.js"></script>
     <script>
     var items = { items: [
-        {name: 'item1', value: 10},
-        {name: 'item2', value: 20},
-        {name: 'item3', value: 30}
+        {name: 'Slug', value: 1},
+        {name: 'Chicken', value: 2},
+        {name: 'Cat', value: 4},
+        {name: 'Honey bee', value: 6},
+        {name: 'Spider!', value: 8}
     ]}
     totaliser.init('itemContainer','counterContainer','totalCounter',items)
+    totaliser.subscribe(hello)
+
+    function hello(){
+        console.log('Hello :)')
+        console.log("totaliser.getState(): \n"+JSON.stringify(totaliser.getState(), null, 3))
+        var store = totaliser.getStore()
+        console.log("var store = totaliser.getStore()\nstore.getState()\n"+JSON.stringify(store.getState(), null, 3))
+    }
     </script>
 </body>
 </html>
